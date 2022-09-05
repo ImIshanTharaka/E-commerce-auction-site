@@ -1,0 +1,107 @@
+{% extends "auctions/layout.html" %}
+{% load static %}
+
+{% block title %}
+Listing
+{% endblock %}
+
+{% block head %}
+<link href="{% static 'auctions/listing_styles.css' %}" rel="stylesheet">
+
+<script>
+    document.addEventListener('DOMContentLoaded', () => {           
+      $('.alert').alert()                                           // popup alert
+    })
+</script>
+{% endblock %}
+
+{% block body %}
+<div class="container mt-5 mb-5">
+    <div class="card">
+        <div class="row g-0">
+            <div class="col-md-6">
+                <div class="main_image">
+                    <img src={{listing.img_url}} width="100%" id="main_product_image">
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="p-3 right-side">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <h2>{{listing.title}}</h2>    
+                    </div>
+                    <h6 class="text-muted font-weight-light"> Category : {{listing.category}}</h6>
+                    <p><small><em>Posted by: {{listing.user.username}}</em></small></p>
+                    <div>
+                        <p>{{listing.description}}</p>
+                    </div>
+                        <h2 class="text-primary">$ {{listing.current_price}}</h2>
+                        <h6 class="text-success">{{listing.bid_number}} bids so far</h6>
+                        <br>
+                        <form action="" method="POST">
+                            {% csrf_token %}
+                            <div class="form-group">
+                                {{bid_form}}
+                            </div>
+                            <div class="form-group">
+                            <input type="submit" class="btn btn-outline-primary" value="Bid Now" name="bid_form">
+                            </div>
+                        </form>
+                        <br>
+
+                        {% comment %} alert messages starts {% endcomment %}
+                        {% if messages %}
+                            {% for message in messages %}
+                                <div class="alert {{ message.tags }} alert-dismissible fade show" role="alert">
+                                    <strong>{{ message }}</strong>
+                                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                            {% endfor %}
+                        {% endif %}
+                        {% comment %} alert messages ends {% endcomment %}
+                        
+                        {% comment %} watchlist button starts {% endcomment %}
+                        {% if user.is_authenticated %}
+                            {% if watchlist_button%} 
+                                <a href="{% url 'remove_watchlist' listing_id=listing.id %}" role="button" class="btn btn-danger">Remove from Watchlist</a>
+                            {% else %}
+                                <a href="{% url 'to_watchlist' listing_id=listing.id %}" role="button" class="btn btn-primary">Add to Watchlist</a>
+                            {% endif %}
+                        {% endif %}
+                        {% comment %} watchlist button ends {% endcomment %}
+
+                    <p><small>Posted on: {{listing.created_at}}</small></p>
+                    
+                    {% comment %} closing the auction starts {% endcomment %}
+                    {% if request.user == listing.user %}
+                        <a href="{% url 'close_listing' listing_id=listing.id %}" role="button" class="btn btn-danger">Close Auction</a>
+                    {% endif %}
+                    {% comment %} closing the auction ends {% endcomment %}
+                    <br><br>
+
+                    {% comment %} comment section starts {% endcomment %}
+                    <h2> Comments : </h2>
+                    <ul type="none"> 
+                    {% for comment in comments %}
+                        <li> <strong>{{comment.user.username}} : </strong> {{comment.comment}} </li>
+                    {% endfor %} 
+                    <ul>
+                    {% comment %} comment section ends{% endcomment %}
+                </div>
+            </div>
+        </div>
+        {% comment %} add comments starts {% endcomment %}
+        <form action="" method="POST">
+            {% csrf_token %}
+            <div class="form-group">
+            {{comment_form}}
+            </div>
+            <div class="form-group">
+            <input type="submit" class="btn btn-secondary" value="Add Comment" name="comment_form">
+            </div>
+        </form>
+        {% comment %} add comments ends{% endcomment %}
+    </div>
+</div>
+{% endblock %}

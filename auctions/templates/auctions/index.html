@@ -1,0 +1,43 @@
+{% extends "auctions/layout.html" %}
+
+
+{% block body %}
+    <h2>Active Listings</h2>
+    {% for listing in listing_list %}
+
+    {% comment %} listings starts {% endcomment %}
+
+    <div class="container mt-5 mb-5">
+        <div class="d-flex justify-content-center row">
+            <div class="row p-2 bg-white border rounded">
+                
+                <div class="col-md-3 mt-1">
+                    <a href="{% url 'listing' listing_id=listing.id %}">
+                        <img class="img-fluid img-responsive rounded product-image" src={{listing.img_url}}>
+                    </a>
+                </div>
+
+                <div class="col-md-6 mt-1">
+                    <a href="{% url 'listing' listing_id=listing.id %}"> <h4>{{listing.title}}</h4> </a>
+                    <p class="text-muted font-weight-light">Posted {{listing.created_at}}</p>
+                    <p>{{listing.description}}</p>
+                </div>
+
+                <div class="align-items-center align-content-center col-md-3 border-left mt-1">
+                    <div class="d-flex flex-row align-items-center">
+                        <h4 class="mr-1 text-primary"> $ {{listing.current_price}}</h4>
+                    </div>
+                    <h6 class="text-secondary"> Bids so far : {{listing.bid_number}}</h6>
+                    <div class="d-flex flex-column mt-4">
+                        <a class="btn btn-primary btn-sm" href="{% url 'listing' listing_id=listing.id %}" role="button">Details</a>
+                    </div>
+                </div> 
+
+            </div>
+        </div>
+    </div> 
+    {% comment %} listing ends {% endcomment %}
+
+    {% endfor %}
+
+{% endblock %}

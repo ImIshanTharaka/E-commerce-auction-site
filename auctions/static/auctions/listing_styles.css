@@ -1,0 +1,40 @@
+.card {
+    border: none;
+    overflow: hidden
+}
+
+.main_image {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-bottom: 1px solid #eee;
+    height: 500px;
+    width: 100%;
+    overflow: hidden
+}
+
+
+.content p {
+    font-size: 12px
+}
+
+.ratings span {
+    font-size: 14px;
+    margin-left: 12px
+}
+
+.colors {
+    margin-top: 5px
+}
+
+.right-side {
+    position: relative
+}
+
+
+.buttons {
+    height: 50px;
+    width: 250px;
+    border-radius: 0px;
+    padding: 10spx;
+}
